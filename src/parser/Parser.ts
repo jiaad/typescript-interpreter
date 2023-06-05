@@ -9,16 +9,20 @@ export default class Parser {
 		this.tokens = tokens
 		this.current = 0
 	}
-	public parse(): Expr {
-    try{
-      const statements: Expr[] = []
-      while(this.isAtEnd()){
-        statements.push(statement())
-      }
-    }catch(e: any){
 
+	public parse(): Stmt[] {
+    try{
+      console.log("jiadadadjadjoad-------")
+      const statements: Stmt[] = []
+      while(!this.isAtEnd()){
+        statements.push(this.statement())
+        console.log(statements)
+      }
+    return statements
+    }catch(e: any){
+        console.log(e?.errormessage)
     }
-	//	return this.expression()
+    throw new Error("Error parser")
 	}
 
   private statement(): Stmt{
@@ -27,9 +31,15 @@ export default class Parser {
   }
 
   private printStatement(): Stmt{
-
+    const value: Expr = this.expression();
+    this.consume(TokenType.Semicolon, "Expect ';' after expression")
+    return Stmt.Print(value)
   }
-  private expressionStatement(): Stmt{}
+  private expressionStatement(): Stmt{
+    const value = this.expression()
+    this.consume(TokenType.Semicolon, "Expect ';' after expression")
+    return Stmt.Expression(value)
+  }
 
 	private expression(): Expr {
 		try {

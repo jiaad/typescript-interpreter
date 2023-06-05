@@ -9,11 +9,11 @@ export interface VisitorStmt<T> {
 
 export abstract class Stmt {
 	abstract accept<T>(visitor: VisitorStmt<T>): T
-  Print(expression: Expr){
+  static Print(expression: Expr){
     return new PrintStmt(expression)
   }
 
-  Expression(expression: Expr){
+  static Expression(expression: Expr){
     return new ExpressionStmt(expression)
   }
 }

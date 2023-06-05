@@ -4,6 +4,7 @@ import Parser from "./parser/Parser"
 import { createInterface } from "readline"
 import { Expr } from "./lexer/Expr"
 import Interpreter from "./parser/Interpreter"
+import { Stmt } from "./parser/Stmt"
 
 const readline = createInterface({
 	input: process.stdin,
@@ -50,11 +51,11 @@ class Tlox {
 			let tokens = lexer.tokenizer()
 			let parser = new Parser(tokens)
 
-		  let expression: Expr = parser.parse()
+		  let expression: Stmt[] = parser.parse()
 			if (this.hadError) return
 			//let interpreter = new Interpreter().interpreter(expression)
 			//console.log(interpreter)
-		//	console.log(expression)
+      console.log(expression)
 			console.log(tokens)
 		} catch (error) {
 			console.log(error)
