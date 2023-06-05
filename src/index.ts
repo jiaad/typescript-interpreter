@@ -19,6 +19,7 @@ class Tlox {
     var myvar = "jiad";
     var a = 458;
     10 + 45 + 45;
+    print "jiad";
     // jiad
   `
 		let a = "() {} + - * /"
@@ -49,11 +50,11 @@ class Tlox {
 			let tokens = lexer.tokenizer()
 			let parser = new Parser(tokens)
 
-			let expression: Expr = parser.parse()
+		  let expression: Expr = parser.parse()
 			if (this.hadError) return
-			let interpreter = new Interpreter().interpreter(expression)
-			console.log(interpreter)
-			console.log(expression)
+			//let interpreter = new Interpreter().interpreter(expression)
+			//console.log(interpreter)
+		//	console.log(expression)
 			console.log(tokens)
 		} catch (error) {
 			console.log(error)

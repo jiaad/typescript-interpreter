@@ -1,7 +1,7 @@
 import { Expr } from "../lexer/Expr"
 import Token from "../lexer/Token"
 import { TokenItem, TokenType } from "../lexer/TokenType"
-
+import {Stmt } from "./../parser/Stmt"
 export default class Parser {
 	readonly tokens: Token[]
 	private current: number
@@ -10,8 +10,26 @@ export default class Parser {
 		this.current = 0
 	}
 	public parse(): Expr {
-		return this.expression()
+    try{
+      const statements: Expr[] = []
+      while(this.isAtEnd()){
+        statements.push(statement())
+      }
+    }catch(e: any){
+
+    }
+	//	return this.expression()
 	}
+
+  private statement(): Stmt{
+    if(this.match(TokenType.Print)) return this.printStatement()
+    return this.expressionStatement()
+  }
+
+  private printStatement(): Stmt{
+
+  }
+  private expressionStatement(): Stmt{}
 
 	private expression(): Expr {
 		try {
@@ -92,7 +110,7 @@ export default class Parser {
       this.consume(TokenType.RightParen,"Expect ')' after expression.")
       return Expr.Grouping(expr)
     }
-		throw new Error("Unexpected")
+		throw new Error("Unexpected" + this.peek().type)
 	}
 
   private consume(type: TokenItem, message: string){
