@@ -4,19 +4,49 @@ import {
   GroupingExpr,
   LiteralExpr,
   UnaryExpr,
-  Visitor
+  Visitor as VisitorExpr
 } from "../lexer/Expr"
 import { TokenType } from "../lexer/TokenType"
+import { ExpressionStmt, PrintStmt, Stmt, VisitorStmt } from "./Stmt"
 
-export default class Interpreter implements Visitor<any> {
-  constructor() { }
-  public interpreter(expression: Expr) {
+export default class Interpreter implements VisitorExpr<any>, VisitorStmt<void> {
+  constructor(){}
+  interpreter(stmts: Stmt[]): void{
+    try{
+      for(let stmt of stmts){
+        this.execute(stmt)
+      }
+    }catch(e: any){
+      console.log(e)
+    }
+  }
+
+
+  execute(stmt: Stmt): any{
+    return stmt.accept(this)
+  }
+
+  visitingExpressionStmt(stmt: ExpressionStmt): void{
+    this.evaluate(stmt.expression)
+    return 
+  }
+   
+  visitingPrintStmt(stmt: PrintStmt): void{
+    const value: Expr =  this.evaluate(stmt.expression) 
+    console.log(value);
+
+    return 
+  }
+ 
+  // EXPRESSION EVALUATION
+  public evaluate(expression: Expr): any {
     return expression.accept(this)
   }
 
+
   visitBinaryExpr(expr: BinaryExpr): any {
-    let left: Expr = this.interpreter(expr.left)
-    let right: Expr = this.interpreter(expr.right)
+    let left: Expr = this.evaluate(expr.left)
+    let right: Expr = this.evaluate(expr.right)
     switch (expr.operator.type) {
       case TokenType.Plus: {
         return Number(left) + Number(right)
@@ -49,7 +79,7 @@ export default class Interpreter implements Visitor<any> {
   }
 
   visitUnaryExpr(expr: UnaryExpr): any {
-    let right: any = this.interpreter(expr.right)
+    let right: any = this.evaluate(expr.right)
     switch (expr.left.type) {
       case TokenType.Minus:
         return -right
@@ -62,7 +92,7 @@ export default class Interpreter implements Visitor<any> {
   }
 
   visitGroupingExpr(expr: GroupingExpr): any {
-    return this.interpreter(expr.expression)
+    return this.evaluate(expr.expression)
   }
 
   // private

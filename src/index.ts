@@ -53,9 +53,7 @@ class Tlox {
 
 		  let expression: Stmt[] = parser.parse()
 			if (this.hadError) return
-			//let interpreter = new Interpreter().interpreter(expression)
-			//console.log(interpreter)
-      console.log(expression)
+			let interpreter = new Interpreter().interpreter(expression)
 			console.log(tokens)
 		} catch (error) {
 			console.log(error)

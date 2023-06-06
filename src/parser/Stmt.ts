@@ -3,8 +3,8 @@ import {Expr} from "../lexer/Expr"
 
 
 export interface VisitorStmt<T> {
-  visitingStmt(Expr: ExpressionStmt): T;
-  printStmt(expr: PrintStmt): T;
+  visitingExpressionStmt(Expr: ExpressionStmt): T;
+  visitingPrintStmt(expr: PrintStmt): T;
 }
 
 export abstract class Stmt {
@@ -19,7 +19,7 @@ export abstract class Stmt {
 }
 
 
-class ExpressionStmt extends Stmt {
+export class ExpressionStmt extends Stmt {
   readonly expression: Expr
   constructor(expression: Expr){
     super()
@@ -27,17 +27,17 @@ class ExpressionStmt extends Stmt {
   }
 
   accept<T>(visitor: VisitorStmt<T>): T{
-    return visitor.visitingStmt(this)
+    return visitor.visitingExpressionStmt(this)
   }
 }
 
-class PrintStmt extends Stmt {
+export class PrintStmt extends Stmt {
   readonly expression: Expr
   constructor(expression: Expr){
     super()
     this.expression = expression
   }
   accept<T>(visitor: VisitorStmt<T>): T{
-    return visitor.printStmt(this)
+    return visitor.visitingPrintStmt(this)
   }
 }
